@@ -10,42 +10,25 @@
   		<h2>Book detail</h2>
   		<table class='table'>
   		  <tr>
-          <td><%= link_to users_path do %>
+          <td><%= link_to(@book.user) do %>
             <%= image_tag @book.user.get_profile_image, size:"100x100" %><br>
             <%= @book.user.name %>
             <% end %>
           </td>
           <td><%= link_to @book.title, @book %></td>
           <td><%= @book.body %></td>
+          <td>コメント数: <%= @book.book_comments.count %></td>
+          <td><%= render "favorites/btn", book: @book %></td>
           <td><% if @book.user == current_user %>
               <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success" %>
               <% end %></td>
           <td><% if @book.user == current_user %>
               <%= link_to 'Destroy', @book, method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%>
               <% end %></td>
-          <td> <% if @book.favorited_by?(current_user) %>
-           <p>
-            <%= link_to book_favorite_path(@book), method: :delete do %>
-              ♥<%= @book.favorites.count %> いいね
-            <% end %>
-           </p>
-           <% else %>
-           <p>
-            <%= link_to book_favorites_path(@book), method: :post do %>
-              ♡<%= @book.favorites.count %> いいね
-            <% end %>
-           </p>
-              <% end %></td>
-          <td>
-            <p>コメント数:<%= @book.book_comments.count %></p>
-            <% @book.book_comments.each do |book_comment| %>
-            <p><image_tag post_comment.user.get_profile_image(100,100) %></p>
-            <%= book_comment.user.name %>
-            <%= book_comment.created_at.strftime('%Y/%m/%d') %><%= book_comment %>
-            <% end %>
-          </td>
         </tr>
       </table>
+      <%= render "book_comments/index", book: @book %>
+      <%= render "book_comments/form", book: @book, book_comment: @book_comment %>
     </div>
   </div>
 </div>
