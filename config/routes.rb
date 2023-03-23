@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   root :to =>"homes#top"
   devise_for :users
 
+  get "search" => "searches#search"
 
   resources :books, only: [:index,:show,:edit,:create,:destroy,:update] do
    resource :favorites, only: [:create, :destroy]
