@@ -18,7 +18,8 @@
           <td><%= link_to @book.title, @book %></td>
           <td><%= @book.body %></td>
           <td>コメント数: <%= @book.book_comments.count %></td>
-          <td><%= render "favorites/btn", book: @book %></td>
+          <td class="favorite-btn">
+            <%= render "favorites/btn", book: @book %></td>
           <td><% if @book.user == current_user %>
               <%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success" %>
               <% end %></td>
