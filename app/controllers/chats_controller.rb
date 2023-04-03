@@ -1,32 +1,38 @@
 class ChatsController < ApplicationController
+  before_action :reject_non, only: [:show]
   def show
     @user = User.find(params[:id])
     rooms = current_user.user_rooms.pluck(:room_id)
-    user_room = UserRoom.find_by(user_id: @user.id, room_id: rooms)
-    
-    rooms = nill
-    if user_room.nill?
-      room = Room.new
-      room.save
-       UserRoom.create(user_id: @user.id, room_id: room.id)
-       UserRoom.create(user_id: current_user.id, room_id: room.id)
+    user_rooms = UserRoom.find_by(user_id: @user.id, room_id: rooms)
+
+    unless user_rooms.nil?
+      @room = user_rooms.room
     else
-      room = user_room.room  
+      @room = Room.new
+      @room.save
+       UserRoom.create(user_id: @user.id, room_id: @room.id)
+       UserRoom.create(user_id: current_user.id, room_id: @room.id)
     end
-    
-    @chats = room.chats
-    @chat = Chat.new(room_id: room.id)
+    @chats = @room.chats
+    @chat = Chat.new(room_id: @room.id)
   end
-  
+
   def create
     @chat = current_user.chats.new(chat_params)
-    @chat.save
+    render :validater unless @chat.save
   end
-  
-  
+
+
   private
-  
+
   def chat_params
-    params.require(:chat).permit(:message, :room_)
+    params.require(:chat).permit(:message, :room_id)
+  end
+
+  def reject_non
+    user = User.find(params[:id])
+    unless current_user.following?(user) && user.following?(current_user)
+      redirect_to books_path
+    end
   end
 end
