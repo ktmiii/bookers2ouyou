@@ -19,6 +19,7 @@
         <td>コメント数: <%= book.book_comments.count %></td>
         <td class="favorite-btn<%=book.id %>">
           <%= render "favorites/btn", book: book %></td>
+        <td>閲覧数:<%= See.count %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,5 +1,5 @@
 class ChatsController < ApplicationController
-  before_action :reject_non, only: [:show]
+  before_action :reject_non_related, only: [:show]
   def show
     @user = User.find(params[:id])
     rooms = current_user.user_rooms.pluck(:room_id)
@@ -29,7 +29,7 @@ class ChatsController < ApplicationController
     params.require(:chat).permit(:message, :room_id)
   end
 
-  def reject_non
+  def reject_non_related
     user = User.find(params[:id])
     unless current_user.following?(user) && user.following?(current_user)
       redirect_to books_path

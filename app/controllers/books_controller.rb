@@ -6,6 +6,14 @@ before_action :is_matching, only: [:edit, :update, :destroy]
     @user = @book.user
     @book_new = Book.new
     @book_comment = BookComment.new
+
+    @see = See.find_by(ip: request.remote_ip)
+      if @see
+        @books = Book.all
+      else
+        @books = Book.all
+        See.create(ip: request.remote_ip)
+      end
   end
 
   def index
@@ -16,6 +24,14 @@ before_action :is_matching, only: [:edit, :update, :destroy]
       a.favorited_users.where(created_at: from...to).size
      }
     @book = Book.new
+
+    @see = See.find_by(ip: request.remote_ip)
+      if @see
+        @books = Book.all
+      else
+        @books = Book.all
+        See.create(ip: request.remote_ip)
+      end
   end
 
   def create
