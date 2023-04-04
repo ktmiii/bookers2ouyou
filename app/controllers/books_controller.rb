@@ -4,16 +4,10 @@ before_action :is_matching, only: [:edit, :update, :destroy]
   def show
     @book = Book.find(params[:id])
     @user = @book.user
-    @book_new = Book.new
-    @book_comment = BookComment.new
-
-    @see = See.find_by(ip: request.remote_ip)
-      if @see
-        @books = Book.all
-      else
-        @books = Book.all
-        See.create(ip: request.remote_ip)
-      end
+    unless See.find_by(user_id: current_user.id, book_id: @book.id)
+      current_user.sees.create(book_id: @book.id)
+    end
+      @book_comment = BookComment.new
   end
 
   def index
@@ -24,14 +18,6 @@ before_action :is_matching, only: [:edit, :update, :destroy]
       a.favorited_users.where(created_at: from...to).size
      }
     @book = Book.new
-
-    @see = See.find_by(ip: request.remote_ip)
-      if @see
-        @books = Book.all
-      else
-        @books = Book.all
-        See.create(ip: request.remote_ip)
-      end
   end
 
   def create

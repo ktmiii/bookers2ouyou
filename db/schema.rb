@@ -84,7 +84,8 @@ ActiveRecord::Schema.define(version: 2023_04_04_004934) do
   end
 
   create_table "sees", force: :cascade do |t|
-    t.string "ip"
+    t.integer "user_id"
+    t.integer "book_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
