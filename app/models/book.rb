@@ -9,6 +9,7 @@ class Book < ApplicationRecord
   scope :created_yesterday, -> { where(created_at: 1.day.ago.all_day) }
   scope :created_this_week, -> { where(created_at: Time.current.all_week) }
   scope :created_last_week, -> { where(created_at: 1.week.ago.all_week) }
+  scope :past_week, -> { where('created_at >=?', 1.week.ago).order(created_at: :asc) }
 
   validates :title,presence:true
   validates :body,presence:true,length:{maximum:200}
